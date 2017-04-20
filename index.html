@@ -1,75 +1,73 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>gaussion</title>
-</head>
-<script src="stackblur.js"></script>
-  <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+  <title>gaussion</title>
+  <link href="./css/jquery-ui.css" rel="stylesheet" type="text/css"/>
+  <script src="./js/stackblur.js"></script>
+  <script src="./js/jquery.min.js"></script>
+  <script src="./js/jquery-ui.min.js"></script>
    
   <script>
 
   var b = 10;
-      $(document).ready(function () {
-          $("#slider").slider(
-          {
-              min: 1,
-              max: 179,
-              step: 1,
-              value: b,
-              change: showValue
+  $(document).ready(function () {
+      $("#slider").slider(
+      {
+          min: 1,
+          max: 179,
+          step: 1,
+          value: b,
+          change: showValue
 
-          });
-          function showValue(event, ui) {
-              b = (ui.value);
-          }
       });
-document.addEventListener('DOMContentLoaded', function(){
-    var video = document.getElementById('v');
+      function showValue(event, ui) {
+          b = (ui.value);
+      }
+  });
+  document.addEventListener('DOMContentLoaded', function(){
+      var video = document.getElementById('v');
+      var canvas = document.getElementById('c');
+      var canvascontext = canvas.getContext('2d');
 
-    var canvas = document.getElementById('c');
-    var canvascontext = canvas.getContext('2d');
+      var cw,ch;  
 
-    var cw,ch;	
+      video.addEventListener('play', function(){
+      cw = video.clientWidth;
+      ch = video.clientHeight;        
+      canvas.width = cw;
+      canvas.height = ch;
+      draw(video,canvascontext,cw,ch);
+      }, false);
 
-    video.addEventListener('play', function(){
+  }, false);
 
-		cw = video.clientWidth;
-    	ch = video.clientHeight;        
-        canvas.width = cw;
-        canvas.height = ch;
-        draw(video,canvascontext,cw,ch);
-    }, false);
+  function draw(video,context,w,h) {
+      if(video.paused || video.ended) 
+        return false;
 
-}, false);
+      context.drawImage(v,0,0,w,h);
+      var idata = context.getImageData(0,0,w,h);
+      idata = processImageDataRGBA(idata,320,0, w, h, b);
+      context.putImageData(idata,0,0);
 
-function draw(video,context,w,h) {
-    if(video.paused || video.ended) 
-    	return false;
+      setTimeout(function(){ draw(video,context,w,h); }, 50);
+  }
+  </script>   
+</head> 
 
-    context.drawImage(v,0,0,w,h);
-    var idata = context.getImageData(0,0,w,h);
-    idata = processImageDataRGBA(idata,320,0, w, h, b);
-    context.putImageData(idata,0,0);
-
-    setTimeout(function(){ draw(video,context,w,h); }, 50);
-}
-</script> 	
- 
 <body style="background: black">
-	<video id=v controls loop width="480" height="100%"> 
-		<source src=video.webm type=video/webm> 
-		<source src=video.ogg type=video/ogg> 
-		<source src=video.mp4 type=video/mp4> 
-	</video> 
 
-	<canvas id=c width="480" height="100%"> 
-		Your browser does not support the HTML5 canvas tag.
-	</canvas> 
+  <video id=v controls loop width="480" height="100%"> 
+    <source src=./video/video.webm type=video/webm> 
+    <source src=./video/video.ogg type=video/ogg> 
+    <source src=./video/video.mp4 type=video/mp4> 
+  </video> 
 
-	<div style="margin: 10px" id="slider"></div>
+  <canvas id=c width="480" height="100%"> 
+    Your browser does not support the HTML5 canvas tag.
+  </canvas> 
 
-
+  <div style="margin: 10px" id="slider"></div>
 </body>
+
 </html>
