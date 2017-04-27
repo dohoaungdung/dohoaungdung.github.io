@@ -44,6 +44,7 @@
   function draw(video,context,w,h) {
       if(video.paused || video.ended) 
         return false;
+      var a;
 
       context.drawImage(v,0,0,w,h);
       var idata = context.getImageData(0,0,w,h);
